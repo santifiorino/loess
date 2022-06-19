@@ -3,7 +3,7 @@ from sklearn.preprocessing import PolynomialFeatures
 
 def tricubic(x):
     y = np.zeros_like(x)
-    idx = (x >= -1) & (x <= 1)
+    idx = (x >= 0) & (x <= 1)
     y[idx] = np.power(1.0 - np.power(np.abs(x[idx]), 3), 3)
     return y
 
@@ -21,6 +21,10 @@ class Loess:
         self.s_xx, self.mean_xx, self.std_xx = self.standarize_data(xx)
         self.s_yy, self.mean_yy, self.std_yy = self.standarize_data(yy)
         self.degree = degree
+
+    def reset_xx(self, xx):
+        xx = np.array(xx)
+        self.s_xx, self.mean_xx, self.std_xx = self.standarize_data(xx)
 
     def reset_yy(self, yy):
         yy = np.array(yy)
@@ -54,7 +58,7 @@ class Loess:
         xm = self.s_xx[min_idx]
         ym = self.s_yy[min_idx]
 
-        poly = PolynomialFeatures(degree=self.degree)
+        poly = PolynomialFeatures(degree=self.degree, include_bias=False)
         xm = poly.fit_transform(xm)
         xp = poly.fit_transform(s_x.reshape(1, -1))[0]
 
