@@ -22,7 +22,11 @@ class Loess:
         self.s_yy, self.mean_yy, self.std_yy = self.standarize_data(yy)
         self.degree = degree
 
-    def set_degree(self, degree):
+    def reset_yy(self, yy):
+        yy = np.array(yy)
+        self.s_yy, self.mean_yy, self.std_yy = self.standarize_data(yy)
+
+    def reset_degree(self, degree):
         self.degree = degree
 
     @staticmethod
@@ -50,7 +54,7 @@ class Loess:
         xm = self.s_xx[min_idx]
         ym = self.s_yy[min_idx]
 
-        poly = PolynomialFeatures(degree=self.degree, include_bias=False)
+        poly = PolynomialFeatures(degree=self.degree)
         xm = poly.fit_transform(xm)
         xp = poly.fit_transform(s_x.reshape(1, -1))[0]
 
