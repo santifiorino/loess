@@ -58,7 +58,7 @@ class Loess:
         xm = self.s_xx[min_idx]
         ym = self.s_yy[min_idx]
 
-        poly = PolynomialFeatures(degree=self.degree, include_bias=False)
+        poly = PolynomialFeatures(degree=self.degree)
         xm = poly.fit_transform(xm)
         xp = poly.fit_transform(s_x.reshape(1, -1))[0]
 
