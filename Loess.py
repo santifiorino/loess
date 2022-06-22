@@ -1,11 +1,13 @@
 import numpy as np
 from sklearn.preprocessing import PolynomialFeatures
 
-def tricubic(x):
+
+def ncubic(x, exponent):
     y = np.zeros_like(x)
     idx = (x >= 0) & (x <= 1)
-    y[idx] = np.power(1.0 - np.power(np.abs(x[idx]), 3), 3)
+    y[idx] = np.power(1.0 - np.power(x[idx], exponent), exponent)
     return y
+
 
 class Loess:
 
@@ -15,12 +17,13 @@ class Loess:
         data_std = data.std(0)
         return (data - data_mean) / data_std, data_mean, data_std
 
-    def __init__(self, xx, yy, degree):
+    def __init__(self, xx, yy, degree=1, distance_exponent=3):
         xx = np.array(xx)
         yy = np.array(yy)
         self.s_xx, self.mean_xx, self.std_xx = self.standarize_data(xx)
         self.s_yy, self.mean_yy, self.std_yy = self.standarize_data(yy)
         self.degree = degree
+        self.distance_exponent = distance_exponent
 
     def reset_xx(self, xx):
         xx = np.array(xx)
@@ -33,10 +36,13 @@ class Loess:
     def reset_degree(self, degree):
         self.degree = degree
 
-    @staticmethod
-    def get_weights(distances, min_range):
+    def reset_exponent(self, distance_exponent):
+        self.distance_exponent = distance_exponent
+
+    def get_weights(self, distances, min_range):
         max_distance = max(distances[min_range])
-        weights = tricubic(distances[min_range] / max_distance)
+        weights = ncubic(distances[min_range] /
+                         max_distance, self.distance_exponent)
         return weights
 
     def standarize_x(self, value):
@@ -54,7 +60,7 @@ class Loess:
 
         weights = self.get_weights(distances, min_idx)
         wm = np.diag(weights)
-        
+
         xm = self.s_xx[min_idx]
         ym = self.s_yy[min_idx]
 
