@@ -8,7 +8,7 @@ In the notebook <a href="https://github.com/santifiorino/loess/blob/master/secti
 
 ## Personal Experimentation:
 
-In script <a href="https://github.com/santifiorino/loess/blob/master/synth_data_creation.py">synth_data_creation</a> I created the following 4 surfaces in $\R^3$:
+In script <a href="https://github.com/santifiorino/loess/blob/master/synth_data_creation.py">synth_data_creation.py</a> I created the following 4 surfaces in $R^3$:
 
 <img src="https://i.imgur.com/EFFffFP.png" width="800"/>
 
